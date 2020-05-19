@@ -6,9 +6,9 @@ using UnityEditor;
 // * Add modifier keys
 // * Add image states to buttons
 
-public class FS_UnityEditorTools : EditorWindow
+public class FS_UnitySceneTools : EditorWindow
 {
-    GUIStyle FSUETStyle = new GUIStyle();
+    GUIStyle FSUSTStyle = new GUIStyle();
 
     static int buttons = 5;
     static float buttonWidth = 40f;
@@ -31,10 +31,10 @@ public class FS_UnityEditorTools : EditorWindow
     bool verticalLayoutDirection = false;
 
 
-    [MenuItem("Window/FutureSupervillain/Editor Tools")]
+    [MenuItem("Window/FutureSupervillain/Scene Tools")]
     private static void ShowWindow() {
-        var window = GetWindow<FS_UnityEditorTools>();
-        window.titleContent = new GUIContent("F$ Editor Tools");
+        var window = GetWindow<FS_UnitySceneTools>();
+        window.titleContent = new GUIContent("F$ Scene Tools");
         window.minSize = new Vector2( (buttons * buttonWidth) + buttonPadding, buttonHeight + (buttonPadding * 2f));
         window.Show();
     }
@@ -80,7 +80,7 @@ public class FS_UnityEditorTools : EditorWindow
 
         #region New Empty Game Object
         GUI.skin.button.normal.background = (Texture2D)newEmptyGameObjectContent.image;
-        if (GUILayout.Button(newEmptyGameObjectContent, FSUETStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
+        if (GUILayout.Button(newEmptyGameObjectContent, FSUSTStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
         {
             GameObject go = new GameObject("GameObject");
             go.transform.position = Vector3.zero;
@@ -88,7 +88,7 @@ public class FS_UnityEditorTools : EditorWindow
         #endregion
 
         #region Reset PSR
-        if (GUILayout.Button(resetPSRTextureContent, FSUETStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
+        if (GUILayout.Button(resetPSRTextureContent, FSUSTStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
         {
             foreach (GameObject obj in Selection.gameObjects)
             {
@@ -100,7 +100,7 @@ public class FS_UnityEditorTools : EditorWindow
         #endregion
 
         #region Drop To Ground
-        if (GUILayout.Button(dropToGroundContent, FSUETStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
+        if (GUILayout.Button(dropToGroundContent, FSUSTStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
         {
             foreach (GameObject obj in Selection.gameObjects)
             {
@@ -121,7 +121,7 @@ public class FS_UnityEditorTools : EditorWindow
         #endregion
 
         #region Solo
-        if (GUILayout.Button(soloObjectsContent, FSUETStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
+        if (GUILayout.Button(soloObjectsContent, FSUSTStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
         {
             var svm = SceneVisibilityManager.instance;
             foreach (GameObject obj in Object.FindObjectsOfType(typeof(GameObject)))
@@ -143,7 +143,7 @@ public class FS_UnityEditorTools : EditorWindow
             
         }
         
-        if (GUILayout.Button(unsoloObjectsContent, FSUETStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
+        if (GUILayout.Button(unsoloObjectsContent, FSUSTStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
         {
             var svm = SceneVisibilityManager.instance;
             foreach (GameObject obj in FindObjectsOfType<GameObject>())
