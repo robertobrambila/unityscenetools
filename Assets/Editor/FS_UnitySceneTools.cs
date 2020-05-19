@@ -2,7 +2,7 @@
 using UnityEditor;
 
 // To-do
-// * Add undo
+// * Add undo to Solo/Unsolo
 // * Add modifier keys
 // * Add image states to buttons
 
@@ -101,17 +101,21 @@ public class FS_UnitySceneTools : EditorWindow, IHasCustomMenu
         {
             GameObject go = new GameObject("GameObject");
             go.transform.position = Vector3.zero;
+            Undo.RegisterCreatedObjectUndo(go, "Create New Empty GameObject");
         }
         #endregion
 
         #region Reset PSR
         if (GUILayout.Button(resetPSRTextureContent, FSUSTStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
         {
+            
             foreach (GameObject obj in Selection.gameObjects)
             {
+                Undo.RecordObject(obj.transform, "Reset PSR");
                 obj.transform.localPosition = Vector3.zero;
                 obj.transform.localScale = Vector3.one;
-                obj.transform.localEulerAngles = Vector3.zero;   
+                obj.transform.localEulerAngles = Vector3.zero;  
+                PrefabUtility.RecordPrefabInstancePropertyModifications(obj.transform);
             }
         }
         #endregion
@@ -121,6 +125,7 @@ public class FS_UnitySceneTools : EditorWindow, IHasCustomMenu
         {
             foreach (GameObject obj in Selection.gameObjects)
             {
+                Undo.RecordObject(obj.transform, "Drop To Ground");
                 if (obj.GetComponent<Renderer>())
                 {
                     float obj_minY = obj.GetComponent<Renderer>().bounds.min.y;
@@ -133,6 +138,7 @@ public class FS_UnitySceneTools : EditorWindow, IHasCustomMenu
                                                             0,
                                                             obj.transform.position.z);
                 }
+                PrefabUtility.RecordPrefabInstancePropertyModifications(obj.transform);
             }
         }
         #endregion
@@ -146,6 +152,7 @@ public class FS_UnitySceneTools : EditorWindow, IHasCustomMenu
                 if (!Selection.Contains (obj)) // only apply to non-selected objects
                 {
                 obj.hideFlags = HideFlags.HideInHierarchy;
+                if (obj.GetComponent<Renderer>()) obj.GetComponent<Renderer>().enabled = false; // workaround for the potential bug?
 
                 // used to manually refresh Hierarchy Window
                 EditorApplication.RepaintHierarchyWindow ();
@@ -156,8 +163,6 @@ public class FS_UnitySceneTools : EditorWindow, IHasCustomMenu
             }
 
             svm.Isolate(Selection.gameObjects, true); // add modifier for false (don't include children)
-            
-            
         }
         
         if (GUILayout.Button(unsoloObjectsContent, FSUSTStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
@@ -166,9 +171,10 @@ public class FS_UnitySceneTools : EditorWindow, IHasCustomMenu
             foreach (GameObject obj in FindObjectsOfType<GameObject>())
             {
                 obj.hideFlags = HideFlags.None;
+                if (obj.GetComponent<Renderer>()) obj.GetComponent<Renderer>().enabled = true;// workaround for the potential bug?
                 // Debug.Log("Show: " + obj.name + " : " + obj.hideFlags);
             }
-            svm.ShowAll();
+            svm.ExitIsolation();
         }
         #endregion
 
