@@ -6,7 +6,7 @@ using UnityEditor;
 // * Add modifier keys
 // * Add image states to buttons
 
-public class FS_UnitySceneTools : EditorWindow
+public class FS_UnitySceneTools : EditorWindow, IHasCustomMenu
 {
     GUIStyle FSUSTStyle = new GUIStyle();
 
@@ -29,6 +29,23 @@ public class FS_UnitySceneTools : EditorWindow
 
 
     bool verticalLayoutDirection = false;
+
+    #region about context menu
+    string prodName = "F$ Scene Tools";
+    string verNumber = "v0.1.0";
+    string url = "https://www.futuresupervillain.com";
+
+    void IHasCustomMenu.AddItemsToMenu(GenericMenu menu)
+    {
+        GUIContent content = new GUIContent("About...");
+        menu.AddItem(content, false, aboutContextMenu);
+    }
+ 
+    private void aboutContextMenu()
+    {
+        Debug.LogFormat("{0} {1}\n{2}", prodName,verNumber,url);
+    }
+    #endregion
 
 
     [MenuItem("Window/FutureSupervillain/Scene Tools")]
