@@ -37,10 +37,25 @@ public class FS_UnitySceneTools : EditorWindow, IHasCustomMenu
 
     void IHasCustomMenu.AddItemsToMenu(GenericMenu menu)
     {
-        GUIContent content = new GUIContent("About...");
-        menu.AddItem(content, false, aboutContextMenu);
+        GUIContent verticalContent = new GUIContent("Toggle Layout Direction");
+        menu.AddItem(verticalContent, false, verticalContextMenu);
+
+        GUIContent aboutContent = new GUIContent("About...");
+        menu.AddItem(aboutContent, false, aboutContextMenu);
     }
  
+     private void verticalContextMenu()
+    {
+        verticalLayoutDirection = !verticalLayoutDirection;
+        if (verticalLayoutDirection)
+        {
+            Debug.Log("Layout Direction Set To Vertical.");
+        } else
+        {
+            Debug.Log("Layout Direction Set To Horizontal.");
+        }
+    }
+
     private void aboutContextMenu()
     {
         Debug.LogFormat("{0} {1}\n{2}", prodName,verNumber,url);
@@ -58,28 +73,23 @@ public class FS_UnitySceneTools : EditorWindow, IHasCustomMenu
 
     void Awake()
     {
-        // newEmptyGameObject.text = "N";
         newEmptyGameObjectTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityeditortools/default_40x32.png", typeof(Texture));
         newEmptyGameObjectContent.image = newEmptyGameObjectTexture;
         newEmptyGameObjectContent.tooltip = "New Empty Game Object";
         
 
-        // resetPSRTextureContent.text = "PSR";
         resetPSRTextureContent.tooltip = "Reset PSR";
         resetPSRTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityeditortools/default_40x32.png", typeof(Texture));
         resetPSRTextureContent.image = resetPSRTexture;
 
-        // dropToGroundContent.text = "D";
         dropToGroundContent.tooltip = "Drop To Ground";
         dropToGroundTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityeditortools/default_40x32.png", typeof(Texture));
         dropToGroundContent.image = dropToGroundTexture;
 
-        // soloObjectsContent.text = "S";
         soloObjectsContent.tooltip = "Solo Selected Objects";
         soloObjectsTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityeditortools/default_40x32.png", typeof(Texture));
         soloObjectsContent.image = soloObjectsTexture;
 
-        // unsoloObjectsContent.text = "U";
         unsoloObjectsContent.tooltip = "Unsolo All";
         unsoloObjectsTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityeditortools/default_40x32.png", typeof(Texture));
         unsoloObjectsContent.image = unsoloObjectsTexture;
@@ -87,11 +97,12 @@ public class FS_UnitySceneTools : EditorWindow, IHasCustomMenu
     }
 
     private void OnGUI() {
-        GUILayout.BeginArea(new Rect(buttonPadding, buttonPadding, (buttons * buttonWidth), buttonHeight + buttonPadding));
         if (verticalLayoutDirection)
         {
+            GUILayout.BeginArea(new Rect(buttonPadding, buttonPadding, buttonHeight + buttonPadding, (buttons * buttonWidth)));
             GUILayout.BeginVertical();
         } else {
+            GUILayout.BeginArea(new Rect(buttonPadding, buttonPadding, (buttons * buttonWidth), buttonHeight + buttonPadding));
             GUILayout.BeginHorizontal();
         }
 
