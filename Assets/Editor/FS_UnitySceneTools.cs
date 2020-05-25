@@ -10,19 +10,21 @@ namespace FS.Editor
     {
         GUIStyle FSUSTStyle = new GUIStyle();
 
-        static int buttons = 5;
+        static int buttons = 6;
         static float buttonWidth = 40f;
         static float buttonHeight = 40f;
         static float buttonPadding = 4f;
 
         Texture newEmptyGameObjectTexture;
         Texture resetPSRTexture;
+        Texture unparentTexture;
         Texture dropToGroundTexture;
         Texture soloObjectsTexture;
         Texture unsoloObjectsTexture;
 
         GUIContent newEmptyGameObjectContent = new GUIContent();
-        GUIContent resetPSRTextureContent = new GUIContent();
+        GUIContent resetPSRContent = new GUIContent();
+        GUIContent unparentContent = new GUIContent();
         GUIContent dropToGroundContent = new GUIContent();
         GUIContent soloObjectsContent = new GUIContent();
         GUIContent unsoloObjectsContent = new GUIContent();
@@ -78,9 +80,13 @@ namespace FS.Editor
             newEmptyGameObjectContent.tooltip = "New Empty Game Object";
             
 
-            resetPSRTextureContent.tooltip = "Reset PSR";
+            resetPSRContent.tooltip = "Reset PSR";
             resetPSRTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityeditortools/default_40x32.png", typeof(Texture));
-            resetPSRTextureContent.image = resetPSRTexture;
+            resetPSRContent.image = resetPSRTexture;
+
+            unparentContent.tooltip = "Unparent";
+            unparentTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityeditortools/default_40x32.png", typeof(Texture));
+            unparentContent.image = unparentTexture;
 
             dropToGroundContent.tooltip = "Drop To Ground";
             dropToGroundTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityeditortools/default_40x32.png", typeof(Texture));
@@ -148,7 +154,7 @@ namespace FS.Editor
             #endregion
 
             #region Reset PSR
-            if (GUILayout.Button(resetPSRTextureContent, FSUSTStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
+            if (GUILayout.Button(resetPSRContent, FSUSTStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
             {   
                 if (Event.current.shift) // holding (SHIFT) reset P
                 {
@@ -195,6 +201,16 @@ namespace FS.Editor
 
                         PrefabUtility.RecordPrefabInstancePropertyModifications(obj.transform);
                     }
+                }
+            }
+            #endregion
+
+            #region Unparent
+            if (GUILayout.Button(unparentContent, FSUSTStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
+            {
+                foreach (GameObject obj in Selection.gameObjects)
+                {
+                    Undo.SetTransformParent(obj.transform, null, "Unparent");
                 }
             }
             #endregion
