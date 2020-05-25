@@ -12,7 +12,7 @@ public class FS_UnitySceneTools : EditorWindow, IHasCustomMenu
 
     static int buttons = 5;
     static float buttonWidth = 40f;
-    static float buttonHeight = 32f;
+    static float buttonHeight = 40f;
     static float buttonPadding = 4f;
 
     Texture newEmptyGameObjectTexture;
