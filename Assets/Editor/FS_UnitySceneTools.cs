@@ -51,9 +51,15 @@ namespace FS.Editor
             verticalLayoutDirection = !verticalLayoutDirection;
             if (verticalLayoutDirection)
             {
+                var window = GetWindow<FS_UnitySceneTools>();
+                window.minSize = new Vector2(buttonHeight + (buttonPadding * 2f),  (buttons * buttonWidth) + buttonPadding);
+
                 Debug.Log("Layout Direction Set To Vertical.");
             } else
             {
+                var window = GetWindow<FS_UnitySceneTools>();
+                window.minSize = new Vector2( (buttons * buttonWidth) + buttonPadding, buttonHeight + (buttonPadding * 2f));
+
                 Debug.Log("Layout Direction Set To Horizontal.");
             }
         }
@@ -68,7 +74,7 @@ namespace FS.Editor
         [MenuItem("Window/FutureSupervillain/Scene Tools")]
         private static void ShowWindow() {
             var window = GetWindow<FS_UnitySceneTools>();
-            window.titleContent = new GUIContent("F$ Scene Tools");
+            window.titleContent = new GUIContent("Scene Tools");
             window.minSize = new Vector2( (buttons * buttonWidth) + buttonPadding, buttonHeight + (buttonPadding * 2f));
             window.Show();
         }
