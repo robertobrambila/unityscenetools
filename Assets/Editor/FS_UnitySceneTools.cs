@@ -15,12 +15,14 @@ namespace FS.Editor
         static float buttonHeight = 40f;
         static float buttonPadding = 4f;
 
+        Texture normalTexture, highlightedTexture, pressedTexture, disabledTexture;
         Texture newEmptyGameObjectTexture;
         Texture resetPSRTexture;
         Texture unparentTexture;
         Texture dropToGroundTexture;
         Texture soloObjectsTexture;
         Texture unsoloObjectsTexture;
+
 
         GUIContent newEmptyGameObjectContent = new GUIContent();
         GUIContent resetPSRContent = new GUIContent();
@@ -74,6 +76,7 @@ namespace FS.Editor
         [MenuItem("Window/FutureSupervillain/Scene Tools")]
         private static void ShowWindow() {
             var window = GetWindow<FS_UnitySceneTools>();
+            window.wantsMouseMove = true; // necessary in order for hover image states to work correctly / without delay
             window.titleContent = new GUIContent("Scene Tools");
             window.minSize = new Vector2( (buttons * buttonWidth) + buttonPadding, buttonHeight + (buttonPadding * 2f));
             window.Show();
@@ -81,34 +84,51 @@ namespace FS.Editor
 
         void Awake()
         {
-            newEmptyGameObjectTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityeditortools/default_40x32.png", typeof(Texture));
+            
+            normalTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/normal_40x40.png", typeof(Texture));
+            pressedTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/pressed_40x40.png", typeof(Texture));
+            highlightedTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/highlighted_40x40.png", typeof(Texture));
+            disabledTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/disabled_40x40.png", typeof(Texture));
+
+            FSUSTStyle.normal.background = (Texture2D)normalTexture;
+            // FSUSTStyle.onNormal.background = (Texture2D)normalTexture;
+            FSUSTStyle.hover.background = (Texture2D)highlightedTexture;
+            // FSUSTStyle.onHover.background = (Texture2D)highlightedTexture;
+            FSUSTStyle.active.background = (Texture2D)pressedTexture;
+            // FSUSTStyle.onActive.background = (Texture2D)pressedTexture;
+
+
+            newEmptyGameObjectTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/star_40x40.png", typeof(Texture));
             newEmptyGameObjectContent.image = newEmptyGameObjectTexture;
             newEmptyGameObjectContent.tooltip = "New Empty Game Object";
             
 
             resetPSRContent.tooltip = "Reset PSR";
-            resetPSRTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityeditortools/default_40x32.png", typeof(Texture));
+            resetPSRTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/star_40x40.png", typeof(Texture));
             resetPSRContent.image = resetPSRTexture;
 
             unparentContent.tooltip = "Unparent";
-            unparentTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityeditortools/default_40x32.png", typeof(Texture));
+            unparentTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/star_40x40.png", typeof(Texture));
             unparentContent.image = unparentTexture;
 
             dropToGroundContent.tooltip = "Drop To Ground";
-            dropToGroundTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityeditortools/default_40x32.png", typeof(Texture));
+            dropToGroundTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/star_40x40.png", typeof(Texture));
             dropToGroundContent.image = dropToGroundTexture;
 
             soloObjectsContent.tooltip = "Solo Selected Objects";
-            soloObjectsTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityeditortools/default_40x32.png", typeof(Texture));
+            soloObjectsTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/star_40x40.png", typeof(Texture));
             soloObjectsContent.image = soloObjectsTexture;
 
             unsoloObjectsContent.tooltip = "Unsolo All";
-            unsoloObjectsTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityeditortools/default_40x32.png", typeof(Texture));
+            unsoloObjectsTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/star_40x40.png", typeof(Texture));
             unsoloObjectsContent.image = unsoloObjectsTexture;
 
         }
 
         private void OnGUI() {
+            // force repaint window on mouse move so hover image states work correctly
+            if (Event.current.type == EventType.MouseMove) Repaint();
+
             if (verticalLayoutDirection)
             {
                 GUILayout.BeginArea(new Rect(buttonPadding, buttonPadding, buttonHeight + buttonPadding, (buttons * buttonWidth)));
@@ -119,7 +139,6 @@ namespace FS.Editor
             }
 
             #region New Empty Game Object
-            GUI.skin.button.normal.background = (Texture2D)newEmptyGameObjectContent.image;
             if (GUILayout.Button(newEmptyGameObjectContent, FSUSTStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
             {
                 if (Event.current.shift && (Selection.activeGameObject != null) ) // holding (SHIFT) insert as local child for each object in selection
