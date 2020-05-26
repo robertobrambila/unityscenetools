@@ -84,6 +84,13 @@ namespace FS.Editor
 
         void Awake()
         {
+
+            // check to see if we're already docked in the scene, if so enable mousemove to allow for correct window repaint
+            var window = GetWindow<FS_UnitySceneTools>();
+            if (window != null)
+            {
+                window.wantsMouseMove = true;
+            }
             
             normalTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/normal_40x40.png", typeof(Texture));
             pressedTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/pressed_40x40.png", typeof(Texture));
@@ -157,7 +164,10 @@ namespace FS.Editor
                     {
                         GameObject go = new GameObject("GameObject");
                         Undo.RegisterCreatedObjectUndo(go, "Create New Parent GameObject");
+
+                        go.transform.SetParent(obj.transform.parent); // nest the GO in case the selection is a child
                         Undo.SetTransformParent(obj.transform,go.transform, "Set New Parent");
+
                     }
                 }
                 else if (Event.current.control && (Selection.activeGameObject != null) )// holding (control) insert as local parent to entire selection
@@ -166,6 +176,7 @@ namespace FS.Editor
                     Undo.RegisterCreatedObjectUndo(go, "Create New Parent GameObject");
                     foreach (GameObject obj in Selection.gameObjects)
                     {
+                        go.transform.SetParent(obj.transform.parent); // nest the GO in case the selection is a child
                         Undo.SetTransformParent(obj.transform,go.transform, "Set New Parent");
                     }
                 }
@@ -249,12 +260,12 @@ namespace FS.Editor
                     if (obj.GetComponent<Renderer>())
                     {
                         float obj_minY = obj.GetComponent<Renderer>().bounds.min.y;
-                        obj.transform.localPosition = new Vector3(obj.transform.position.x, 
+                        obj.transform.position = new Vector3(obj.transform.position.x, 
                                                                 obj.transform.position.y - obj_minY,
                                                                 obj.transform.position.z);
                     } else
                     {
-                        obj.transform.localPosition = new Vector3(obj.transform.position.x, 
+                        obj.transform.position = new Vector3(obj.transform.position.x, 
                                                                 0,
                                                                 obj.transform.position.z);
                     }
@@ -267,19 +278,22 @@ namespace FS.Editor
             if (GUILayout.Button(soloObjectsContent, FSUSTStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
             {
                 var svm = SceneVisibilityManager.instance;
-                foreach (GameObject obj in Object.FindObjectsOfType(typeof(GameObject)))
+                foreach (GameObject obj in FindObjectsOfType<GameObject>())
                 {
                     if (!Selection.Contains (obj)) // only apply to non-selected objects
                     {
-                        Undo.RegisterFullObjectHierarchyUndo(obj, "Solo Selection"); // save state for undo
-                        obj.hideFlags = HideFlags.HideInHierarchy;
-                        if (obj.GetComponent<Renderer>()) obj.GetComponent<Renderer>().enabled = false; // workaround for the potential bug?
+                        if (!Selection.activeTransform.IsChildOf(obj.transform)) // don't apply to parent of selection else hierarchy will appear empty
+                        {
+                            Undo.RegisterFullObjectHierarchyUndo(obj, "Solo Selection"); // save state for undo
+                            obj.hideFlags = HideFlags.HideInHierarchy;
+                            if (obj.GetComponent<Renderer>()) obj.GetComponent<Renderer>().enabled = false; // workaround for the potential bug?
 
-                        // used to manually refresh Hierarchy Window
-                        EditorApplication.RepaintHierarchyWindow ();
-                        EditorApplication.DirtyHierarchyWindowSorting();
+                            // used to manually refresh Hierarchy Window
+                            EditorApplication.RepaintHierarchyWindow ();
+                            EditorApplication.DirtyHierarchyWindowSorting();
 
-                        // Debug.Log("Isolate: " + obj.name + " : " + obj.hideFlags);
+                            // Debug.Log("Isolate: " + obj.name + " : " + obj.hideFlags);
+                        }
                     }
                 }
 
