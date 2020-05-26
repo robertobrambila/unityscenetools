@@ -271,19 +271,22 @@ namespace FS.Editor
             if (GUILayout.Button(soloObjectsContent, FSUSTStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
             {
                 var svm = SceneVisibilityManager.instance;
-                foreach (GameObject obj in Object.FindObjectsOfType(typeof(GameObject)))
+                foreach (GameObject obj in FindObjectsOfType<GameObject>())
                 {
                     if (!Selection.Contains (obj)) // only apply to non-selected objects
                     {
-                        Undo.RegisterFullObjectHierarchyUndo(obj, "Solo Selection"); // save state for undo
-                        obj.hideFlags = HideFlags.HideInHierarchy;
-                        if (obj.GetComponent<Renderer>()) obj.GetComponent<Renderer>().enabled = false; // workaround for the potential bug?
+                        if (!Selection.activeTransform.IsChildOf(obj.transform)) // don't apply to parent of selection else hierarchy will appear empty
+                        {
+                            Undo.RegisterFullObjectHierarchyUndo(obj, "Solo Selection"); // save state for undo
+                            obj.hideFlags = HideFlags.HideInHierarchy;
+                            if (obj.GetComponent<Renderer>()) obj.GetComponent<Renderer>().enabled = false; // workaround for the potential bug?
 
-                        // used to manually refresh Hierarchy Window
-                        EditorApplication.RepaintHierarchyWindow ();
-                        EditorApplication.DirtyHierarchyWindowSorting();
+                            // used to manually refresh Hierarchy Window
+                            EditorApplication.RepaintHierarchyWindow ();
+                            EditorApplication.DirtyHierarchyWindowSorting();
 
-                        // Debug.Log("Isolate: " + obj.name + " : " + obj.hideFlags);
+                            // Debug.Log("Isolate: " + obj.name + " : " + obj.hideFlags);
+                        }
                     }
                 }
 
