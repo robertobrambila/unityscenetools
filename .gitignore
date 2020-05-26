@@ -14,7 +14,8 @@
 /[Pp]rojectSettings/
 
 # Keep only Editor & EditorDefaultResources folders
-!/[Aa]ssets/Editor*/*
+!/[Aa]ssets/Editor/
+!/[Aa]ssets/Editor*Default*Resources/
 
 # Never ignore Asset meta data
 !/[Aa]ssets/**/*.meta
