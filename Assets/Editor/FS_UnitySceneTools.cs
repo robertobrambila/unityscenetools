@@ -157,7 +157,10 @@ namespace FS.Editor
                     {
                         GameObject go = new GameObject("GameObject");
                         Undo.RegisterCreatedObjectUndo(go, "Create New Parent GameObject");
+
+                        go.transform.SetParent(obj.transform.parent); // nest the GO in case the selection is a child
                         Undo.SetTransformParent(obj.transform,go.transform, "Set New Parent");
+
                     }
                 }
                 else if (Event.current.control && (Selection.activeGameObject != null) )// holding (control) insert as local parent to entire selection
@@ -166,6 +169,7 @@ namespace FS.Editor
                     Undo.RegisterCreatedObjectUndo(go, "Create New Parent GameObject");
                     foreach (GameObject obj in Selection.gameObjects)
                     {
+                        go.transform.SetParent(obj.transform.parent); // nest the GO in case the selection is a child
                         Undo.SetTransformParent(obj.transform,go.transform, "Set New Parent");
                     }
                 }
