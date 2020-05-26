@@ -2,6 +2,8 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/master/Unity.gitignore
 #
+
+/[Aa]ssets/
 /[Ll]ibrary/
 /[Tt]emp/
 /[Oo]bj/
@@ -9,8 +11,14 @@
 /[Bb]uilds/
 /[Ll]ogs/
 /[Mm]emoryCaptures/
+/[Pp]ackages/
+/[Pp]rojectSettings/
+
+# Keep Editor & Editor Default Resources
+!/[Aa]ssets/Editor*/*
 
 # Never ignore Asset meta data
+!/[Aa]ssets/Editor/*
 !/[Aa]ssets/**/*.meta
 
 # Uncomment this line if you wish to ignore the asset store tools plugin
@@ -21,6 +29,7 @@
 
 # Visual Studio cache directory
 .vs/
+/.vscode/
 
 # Gradle cache directory
 .gradle/
