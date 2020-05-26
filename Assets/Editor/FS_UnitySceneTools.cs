@@ -253,12 +253,12 @@ namespace FS.Editor
                     if (obj.GetComponent<Renderer>())
                     {
                         float obj_minY = obj.GetComponent<Renderer>().bounds.min.y;
-                        obj.transform.localPosition = new Vector3(obj.transform.position.x, 
+                        obj.transform.position = new Vector3(obj.transform.position.x, 
                                                                 obj.transform.position.y - obj_minY,
                                                                 obj.transform.position.z);
                     } else
                     {
-                        obj.transform.localPosition = new Vector3(obj.transform.position.x, 
+                        obj.transform.position = new Vector3(obj.transform.position.x, 
                                                                 0,
                                                                 obj.transform.position.z);
                     }
