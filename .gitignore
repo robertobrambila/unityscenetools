@@ -2,7 +2,7 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/master/Unity.gitignore
 #
-/[Aa]ssets/
+/[Aa]ssets/Scenes/
 /[Ll]ibrary/
 /[Tt]emp/
 /[Oo]bj/
@@ -12,10 +12,6 @@
 /[Mm]emoryCaptures/
 /[Pp]ackages/
 /[Pp]rojectSettings/
-
-# Keep only Editor & EditorDefaultResources folders
-!/[Aa]ssets/Editor/
-!/[Aa]ssets/Editor*Default*Resources/
 
 # Never ignore Asset meta data
 !/[Aa]ssets/**/*.meta
