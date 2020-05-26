@@ -98,29 +98,29 @@ namespace FS.Editor
             // FSUSTStyle.onActive.background = (Texture2D)pressedTexture;
 
 
-            newEmptyGameObjectTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/star_40x40.png", typeof(Texture));
+            newEmptyGameObjectTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/newgameobject_icon_40x40.png", typeof(Texture));
             newEmptyGameObjectContent.image = newEmptyGameObjectTexture;
-            newEmptyGameObjectContent.tooltip = "New Empty Game Object";
+            newEmptyGameObjectContent.tooltip = "New Game Object";
             
 
             resetPSRContent.tooltip = "Reset PSR";
-            resetPSRTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/star_40x40.png", typeof(Texture));
+            resetPSRTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/resetpsr_icon_40x40.png", typeof(Texture));
             resetPSRContent.image = resetPSRTexture;
 
             unparentContent.tooltip = "Unparent";
-            unparentTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/star_40x40.png", typeof(Texture));
+            unparentTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/unparent_icon_40x40.png", typeof(Texture));
             unparentContent.image = unparentTexture;
 
             dropToGroundContent.tooltip = "Drop To Ground";
-            dropToGroundTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/star_40x40.png", typeof(Texture));
+            dropToGroundTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/droptoground_icon_40x40.png", typeof(Texture));
             dropToGroundContent.image = dropToGroundTexture;
 
-            soloObjectsContent.tooltip = "Solo Selected Objects";
-            soloObjectsTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/star_40x40.png", typeof(Texture));
+            soloObjectsContent.tooltip = "Solo Objects";
+            soloObjectsTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/solo_icon_40x40.png", typeof(Texture));
             soloObjectsContent.image = soloObjectsTexture;
 
             unsoloObjectsContent.tooltip = "Unsolo All";
-            unsoloObjectsTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/star_40x40.png", typeof(Texture));
+            unsoloObjectsTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/unsolo_icon_40x40.png", typeof(Texture));
             unsoloObjectsContent.image = unsoloObjectsTexture;
 
         }
