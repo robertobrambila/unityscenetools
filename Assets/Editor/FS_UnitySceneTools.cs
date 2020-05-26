@@ -84,6 +84,13 @@ namespace FS.Editor
 
         void Awake()
         {
+
+            // check to see if we're already docked in the scene, if so enable mousemove to allow for correct window repaint
+            var window = GetWindow<FS_UnitySceneTools>();
+            if (window != null)
+            {
+                window.wantsMouseMove = true;
+            }
             
             normalTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/normal_40x40.png", typeof(Texture));
             pressedTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/pressed_40x40.png", typeof(Texture));
