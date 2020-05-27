@@ -1,9 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-// To-do
-// * Add image states to buttons
-
 namespace FS.Editor
 {
     public class FS_UnitySceneTools : EditorWindow, IHasCustomMenu
@@ -84,13 +81,6 @@ namespace FS.Editor
 
         void Awake()
         {
-
-            // check to see if we're already docked in the scene, if so enable mousemove to allow for correct window repaint
-            var window = GetWindow<FS_UnitySceneTools>();
-            if (window != null)
-            {
-                window.wantsMouseMove = true;
-            }
             
             normalTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/normal_40x40.png", typeof(Texture));
             pressedTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/pressed_40x40.png", typeof(Texture));
@@ -133,8 +123,7 @@ namespace FS.Editor
         }
 
         private void OnGUI() {
-            // force repaint window on mouse move so hover image states work correctly
-            if (Event.current.type == EventType.MouseMove) Repaint();
+            forceRepaint();
 
             if (verticalLayoutDirection)
             {
@@ -321,6 +310,13 @@ namespace FS.Editor
                 GUILayout.EndHorizontal();
             }
             GUILayout.EndArea();
+        }
+
+        private void forceRepaint()
+        {
+            // force repaint window on mouse move so hover image states work correctly
+            var window = GetWindow<FS_UnitySceneTools>();
+            if (Event.current.type == EventType.MouseMove) Repaint();
         }
     }
 }
