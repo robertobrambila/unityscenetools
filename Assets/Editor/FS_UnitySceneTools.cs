@@ -1,9 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-// To-do
-// * Add image states to buttons
-
 namespace FS.Editor
 {
     public class FS_UnitySceneTools : EditorWindow, IHasCustomMenu
