@@ -1,9 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-// To-do
-// * Add image states to buttons
-
 namespace FS.Editor
 {
     public class FS_UnitySceneTools : EditorWindow, IHasCustomMenu
@@ -15,7 +12,7 @@ namespace FS.Editor
         static float buttonHeight = 40f;
         static float buttonPadding = 4f;
 
-        Texture normalTexture, highlightedTexture, pressedTexture, disabledTexture;
+        Texture normalTexture, highlightedTexture, pressedTexture;
         Texture newEmptyGameObjectTexture;
         Texture resetPSRTexture;
         Texture unparentTexture;
@@ -84,25 +81,14 @@ namespace FS.Editor
 
         void Awake()
         {
-
-            // check to see if we're already docked in the scene, if so enable mousemove to allow for correct window repaint
-            var window = GetWindow<FS_UnitySceneTools>();
-            if (window != null)
-            {
-                window.wantsMouseMove = true;
-            }
             
             normalTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/normal_40x40.png", typeof(Texture));
             pressedTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/pressed_40x40.png", typeof(Texture));
             highlightedTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/highlighted_40x40.png", typeof(Texture));
-            disabledTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/disabled_40x40.png", typeof(Texture));
 
             FSUSTStyle.normal.background = (Texture2D)normalTexture;
-            // FSUSTStyle.onNormal.background = (Texture2D)normalTexture;
             FSUSTStyle.hover.background = (Texture2D)highlightedTexture;
-            // FSUSTStyle.onHover.background = (Texture2D)highlightedTexture;
             FSUSTStyle.active.background = (Texture2D)pressedTexture;
-            // FSUSTStyle.onActive.background = (Texture2D)pressedTexture;
 
 
             newEmptyGameObjectTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/newgameobject_icon_40x40.png", typeof(Texture));
@@ -133,8 +119,7 @@ namespace FS.Editor
         }
 
         private void OnGUI() {
-            // force repaint window on mouse move so hover image states work correctly
-            if (Event.current.type == EventType.MouseMove) Repaint();
+            forceRepaint();
 
             if (verticalLayoutDirection)
             {
@@ -180,7 +165,7 @@ namespace FS.Editor
                         Undo.SetTransformParent(obj.transform,go.transform, "Set New Parent");
                     }
                 }
-                else
+                else // create new gameobject at world zero
                 {
                     GameObject go = new GameObject("GameObject");
                     go.transform.position = Vector3.zero;
@@ -196,7 +181,7 @@ namespace FS.Editor
                 {
                     foreach (GameObject obj in Selection.gameObjects)
                     {
-                        Undo.RecordObject(obj.transform, "Reset P"); // save state for undo
+                        Undo.RecordObject(obj.transform, "Reset P");
 
                         obj.transform.localPosition = Vector3.zero;
 
@@ -207,7 +192,7 @@ namespace FS.Editor
                 {
                     foreach (GameObject obj in Selection.gameObjects)
                     {
-                        Undo.RecordObject(obj.transform, "Reset S"); // save state for undo
+                        Undo.RecordObject(obj.transform, "Reset S"); 
 
                         obj.transform.localScale = Vector3.one;
 
@@ -218,7 +203,7 @@ namespace FS.Editor
                 {
                     foreach (GameObject obj in Selection.gameObjects)
                     {
-                        Undo.RecordObject(obj.transform, "Reset R"); // save state for undo
+                        Undo.RecordObject(obj.transform, "Reset R"); 
 
                         obj.transform.localEulerAngles = Vector3.zero;  
 
@@ -229,7 +214,7 @@ namespace FS.Editor
                 {
                     foreach (GameObject obj in Selection.gameObjects)
                     {
-                        Undo.RecordObject(obj.transform, "Reset PSR"); // save state for undo
+                        Undo.RecordObject(obj.transform, "Reset PSR");
 
                         obj.transform.localPosition = Vector3.zero;
                         obj.transform.localScale = Vector3.one;
@@ -244,9 +229,19 @@ namespace FS.Editor
             #region Unparent
             if (GUILayout.Button(unparentContent, FSUSTStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
             {
-                foreach (GameObject obj in Selection.gameObjects)
+                if (Event.current.shift) // holding (SHIFT) keep nested hierarchy
                 {
-                    Undo.SetTransformParent(obj.transform, null, "Unparent");
+                    foreach (GameObject obj in Selection.gameObjects)
+                    {
+                        if (obj.transform.parent.parent != null) Undo.SetTransformParent(obj.transform, obj.transform.parent.parent, "Unparent Nested");
+                    }
+                }
+                else // unparent to scene root
+                {
+                    foreach (GameObject obj in Selection.gameObjects)
+                    {
+                        Undo.SetTransformParent(obj.transform, null, "Unparent To Root");
+                    }
                 }
             }
             #endregion
@@ -256,14 +251,14 @@ namespace FS.Editor
             {
                 foreach (GameObject obj in Selection.gameObjects)
                 {
-                    Undo.RecordObject(obj.transform, "Drop To Ground"); // save state for undo
-                    if (obj.GetComponent<Renderer>())
+                    Undo.RecordObject(obj.transform, "Drop To Ground");
+                    if (obj.GetComponent<Renderer>()) // if obj has mesh, get lowest point and use that to set on ground
                     {
                         float obj_minY = obj.GetComponent<Renderer>().bounds.min.y;
                         obj.transform.position = new Vector3(obj.transform.position.x, 
                                                                 obj.transform.position.y - obj_minY,
                                                                 obj.transform.position.z);
-                    } else
+                    } else // set Y = 0
                     {
                         obj.transform.position = new Vector3(obj.transform.position.x, 
                                                                 0,
@@ -284,20 +279,19 @@ namespace FS.Editor
                     {
                         if (!Selection.activeTransform.IsChildOf(obj.transform)) // don't apply to parent of selection else hierarchy will appear empty
                         {
-                            Undo.RegisterFullObjectHierarchyUndo(obj, "Solo Selection"); // save state for undo
+                            Undo.RegisterFullObjectHierarchyUndo(obj, "Solo Selection");
                             obj.hideFlags = HideFlags.HideInHierarchy;
-                            if (obj.GetComponent<Renderer>()) obj.GetComponent<Renderer>().enabled = false; // workaround for the potential bug?
+                            if (obj.GetComponent<Renderer>()) obj.GetComponent<Renderer>().enabled = false;
 
                             // used to manually refresh Hierarchy Window
                             EditorApplication.RepaintHierarchyWindow ();
                             EditorApplication.DirtyHierarchyWindowSorting();
 
-                            // Debug.Log("Isolate: " + obj.name + " : " + obj.hideFlags);
                         }
                     }
                 }
 
-                svm.Isolate(Selection.gameObjects, true); // add modifier for false (don't include children)
+                svm.Isolate(Selection.gameObjects, true);
             }
             
             if (GUILayout.Button(unsoloObjectsContent, FSUSTStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
@@ -305,10 +299,9 @@ namespace FS.Editor
                 var svm = SceneVisibilityManager.instance;
                 foreach (GameObject obj in FindObjectsOfType<GameObject>())
                 {
-                    Undo.RegisterFullObjectHierarchyUndo(obj, "Unsolo All"); // save state for undo
+                    Undo.RegisterFullObjectHierarchyUndo(obj, "Unsolo All");
                     obj.hideFlags = HideFlags.None;
-                    if (obj.GetComponent<Renderer>()) obj.GetComponent<Renderer>().enabled = true;// workaround for the potential bug?
-                    // Debug.Log("Show: " + obj.name + " : " + obj.hideFlags);
+                    if (obj.GetComponent<Renderer>()) obj.GetComponent<Renderer>().enabled = true;
                 }
                 svm.ExitIsolation();
             }
@@ -321,6 +314,14 @@ namespace FS.Editor
                 GUILayout.EndHorizontal();
             }
             GUILayout.EndArea();
+        }
+
+        // force repaint window on mouse move so hover image states work correctly
+        // if we don't call this ongui, the highlight state gets a delay after relaunching unity or exiting Play mode
+        private void forceRepaint()
+        {
+            var window = GetWindow<FS_UnitySceneTools>();
+            if (Event.current.type == EventType.MouseMove) Repaint();
         }
     }
 }
