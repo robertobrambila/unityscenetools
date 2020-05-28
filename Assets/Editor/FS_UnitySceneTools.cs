@@ -165,7 +165,7 @@ namespace FS.Editor
                         Undo.SetTransformParent(obj.transform,go.transform, "Set New Parent");
                     }
                 }
-                else
+                else // create new gameobject at world zero
                 {
                     GameObject go = new GameObject("GameObject");
                     go.transform.position = Vector3.zero;
@@ -229,9 +229,19 @@ namespace FS.Editor
             #region Unparent
             if (GUILayout.Button(unparentContent, FSUSTStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
             {
-                foreach (GameObject obj in Selection.gameObjects)
+                if (Event.current.shift) // holding (SHIFT) keep nested hierarchy
                 {
-                    Undo.SetTransformParent(obj.transform, null, "Unparent");
+                    foreach (GameObject obj in Selection.gameObjects)
+                    {
+                        if (obj.transform.parent.parent != null) Undo.SetTransformParent(obj.transform, obj.transform.parent.parent, "Unparent Nested");
+                    }
+                }
+                else // unparent to scene root
+                {
+                    foreach (GameObject obj in Selection.gameObjects)
+                    {
+                        Undo.SetTransformParent(obj.transform, null, "Unparent To Root");
+                    }
                 }
             }
             #endregion
@@ -242,13 +252,13 @@ namespace FS.Editor
                 foreach (GameObject obj in Selection.gameObjects)
                 {
                     Undo.RecordObject(obj.transform, "Drop To Ground");
-                    if (obj.GetComponent<Renderer>())
+                    if (obj.GetComponent<Renderer>()) // if obj has mesh, get lowest point and use that to set on ground
                     {
                         float obj_minY = obj.GetComponent<Renderer>().bounds.min.y;
                         obj.transform.position = new Vector3(obj.transform.position.x, 
                                                                 obj.transform.position.y - obj_minY,
                                                                 obj.transform.position.z);
-                    } else
+                    } else // set Y = 0
                     {
                         obj.transform.position = new Vector3(obj.transform.position.x, 
                                                                 0,
