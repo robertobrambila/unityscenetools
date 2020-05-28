@@ -8,7 +8,7 @@
 A collection of useful Unity scene tools to enhance productivity, packaged as a custom Editor window. Tested on Unity 2019.3.5f1.
 
 ## Features
-As of the latest release, the following features are included. Note that some buttons accept modifier keys (hold the modifier key and press the button) for alternate actions. The layout can be oriented horizontally or vertically for your preferred docking style.
+[**v0.1.0**] As of the latest release, the following features are included. Note that some buttons accept modifier keys (hold the modifier key and press the button) for alternate actions. The layout can be oriented horizontally or vertically for your preferred docking style.
 
 
 ### New GameObject
