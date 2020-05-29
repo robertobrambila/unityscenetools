@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using FS.Editor;
 
 namespace FS.Editor
 {
@@ -12,19 +13,19 @@ namespace FS.Editor
         static float buttonHeight = 40f;
         static float buttonPadding = 4f;
 
-        Texture normalTexture, highlightedTexture, pressedTexture;
+        Texture normalTexture, hoverTexture, activeTexture;
         Texture newEmptyGameObjectTexture;
-        Texture resetPSRTexture;
+        Texture resetPRSTexture;
         Texture unparentTexture;
-        Texture dropToGroundTexture;
+        Texture dropTexture;
         Texture soloObjectsTexture;
         Texture unsoloObjectsTexture;
 
 
         GUIContent newEmptyGameObjectContent = new GUIContent();
-        GUIContent resetPSRContent = new GUIContent();
+        GUIContent resetPRSContent = new GUIContent();
         GUIContent unparentContent = new GUIContent();
-        GUIContent dropToGroundContent = new GUIContent();
+        GUIContent dropContent = new GUIContent();
         GUIContent soloObjectsContent = new GUIContent();
         GUIContent unsoloObjectsContent = new GUIContent();
 
@@ -83,12 +84,12 @@ namespace FS.Editor
         {
             
             normalTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/normal_40x40.png", typeof(Texture));
-            pressedTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/pressed_40x40.png", typeof(Texture));
-            highlightedTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/highlighted_40x40.png", typeof(Texture));
+            activeTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/active_40x40.png", typeof(Texture));
+            hoverTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/hover_40x40.png", typeof(Texture));
 
             FSUSTStyle.normal.background = (Texture2D)normalTexture;
-            FSUSTStyle.hover.background = (Texture2D)highlightedTexture;
-            FSUSTStyle.active.background = (Texture2D)pressedTexture;
+            FSUSTStyle.hover.background = (Texture2D)hoverTexture;
+            FSUSTStyle.active.background = (Texture2D)activeTexture;
 
 
             newEmptyGameObjectTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/newgameobject_icon_40x40.png", typeof(Texture));
@@ -96,17 +97,17 @@ namespace FS.Editor
             newEmptyGameObjectContent.tooltip = "New Game Object";
             
 
-            resetPSRContent.tooltip = "Reset PSR";
-            resetPSRTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/resetpsr_icon_40x40.png", typeof(Texture));
-            resetPSRContent.image = resetPSRTexture;
+            resetPRSContent.tooltip = "Reset PRS";
+            resetPRSTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/resetPRS_icon_40x40.png", typeof(Texture));
+            resetPRSContent.image = resetPRSTexture;
 
             unparentContent.tooltip = "Unparent";
             unparentTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/unparent_icon_40x40.png", typeof(Texture));
             unparentContent.image = unparentTexture;
 
-            dropToGroundContent.tooltip = "Drop To Ground";
-            dropToGroundTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/droptoground_icon_40x40.png", typeof(Texture));
-            dropToGroundContent.image = dropToGroundTexture;
+            dropContent.tooltip = "Drop";
+            dropTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/drop_icon_40x40.png", typeof(Texture));
+            dropContent.image = dropTexture;
 
             soloObjectsContent.tooltip = "Solo Objects";
             soloObjectsTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/solo_icon_40x40.png", typeof(Texture));
@@ -133,95 +134,43 @@ namespace FS.Editor
             #region New Empty Game Object
             if (GUILayout.Button(newEmptyGameObjectContent, FSUSTStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
             {
-                if (Event.current.shift && (Selection.activeGameObject != null) ) // holding (SHIFT) insert as local child for each object in selection
+                if (Event.current.shift && (Selection.activeGameObject != null) ) // holding (SHIFT) 
                 {
-                    foreach (GameObject obj in Selection.gameObjects)
-                    {
-                        GameObject go = new GameObject("GameObject");
-                        Undo.RegisterCreatedObjectUndo(go, "Create New Child GameObject");
-                        go.transform.SetParent(obj.transform, false);
-
-                    }
+                    FS_NewGameObject.createAsChild();
                 }
-                else if (Event.current.alt && (Selection.activeGameObject != null) )// holding (ALT) insert as local parent for each object in selection
+                else if (Event.current.alt && (Selection.activeGameObject != null) )// holding (ALT)
                 {
-                    foreach (GameObject obj in Selection.gameObjects)
-                    {
-                        GameObject go = new GameObject("GameObject");
-                        Undo.RegisterCreatedObjectUndo(go, "Create New Parent GameObject");
-
-                        go.transform.SetParent(obj.transform.parent); // nest the GO in case the selection is a child
-                        Undo.SetTransformParent(obj.transform,go.transform, "Set New Parent");
-
-                    }
+                    FS_NewGameObject.createAsParents();
                 }
-                else if (Event.current.control && (Selection.activeGameObject != null) )// holding (control) insert as local parent to entire selection
+                else if (Event.current.control && (Selection.activeGameObject != null) )// holding (CTRL)
                 {
-                    GameObject go = new GameObject("GameObject");
-                    Undo.RegisterCreatedObjectUndo(go, "Create New Parent GameObject");
-                    foreach (GameObject obj in Selection.gameObjects)
-                    {
-                        go.transform.SetParent(obj.transform.parent); // nest the GO in case the selection is a child
-                        Undo.SetTransformParent(obj.transform,go.transform, "Set New Parent");
-                    }
+                    FS_NewGameObject.createAsParent();
                 }
-                else // create new gameobject at world zero
+                else 
                 {
-                    GameObject go = new GameObject("GameObject");
-                    go.transform.position = Vector3.zero;
-                    Undo.RegisterCreatedObjectUndo(go, "Create New GameObject");
+                    FS_NewGameObject.create();
                 }
             }
             #endregion
 
-            #region Reset PSR
-            if (GUILayout.Button(resetPSRContent, FSUSTStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
+            #region Reset PRS
+            if (GUILayout.Button(resetPRSContent, FSUSTStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
             {   
-                if (Event.current.shift) // holding (SHIFT) reset P
+                if (Event.current.shift) // holding (SHIFT)
                 {
-                    foreach (GameObject obj in Selection.gameObjects)
-                    {
-                        Undo.RecordObject(obj.transform, "Reset P");
-
-                        obj.transform.localPosition = Vector3.zero;
-
-                        PrefabUtility.RecordPrefabInstancePropertyModifications(obj.transform);
-                    }
+                    FS_ResetPRS.resetP();
                 }
-                else if (Event.current.alt) // holding (ALT) reset S
+                else if (Event.current.alt) // holding (ALT)
                 {
-                    foreach (GameObject obj in Selection.gameObjects)
-                    {
-                        Undo.RecordObject(obj.transform, "Reset S"); 
-
-                        obj.transform.localScale = Vector3.one;
-
-                        PrefabUtility.RecordPrefabInstancePropertyModifications(obj.transform);
-                    }
+                    FS_ResetPRS.resetR();
                 }
-                else if (Event.current.control) // holding (CONTROL) reset R
+                else if (Event.current.control) // holding (CTRL)
                 {
-                    foreach (GameObject obj in Selection.gameObjects)
-                    {
-                        Undo.RecordObject(obj.transform, "Reset R"); 
-
-                        obj.transform.localEulerAngles = Vector3.zero;  
-
-                        PrefabUtility.RecordPrefabInstancePropertyModifications(obj.transform);
-                    }
+                    FS_ResetPRS.resetS();
                 }
-                else // reset PSR
+                else 
                 {
-                    foreach (GameObject obj in Selection.gameObjects)
-                    {
-                        Undo.RecordObject(obj.transform, "Reset PSR");
-
-                        obj.transform.localPosition = Vector3.zero;
-                        obj.transform.localScale = Vector3.one;
-                        obj.transform.localEulerAngles = Vector3.zero;  
-
-                        PrefabUtility.RecordPrefabInstancePropertyModifications(obj.transform);
-                    }
+                    FS_ResetPRS.reset();
                 }
             }
             #endregion
@@ -229,81 +178,33 @@ namespace FS.Editor
             #region Unparent
             if (GUILayout.Button(unparentContent, FSUSTStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
             {
-                if (Event.current.shift) // holding (SHIFT) keep nested hierarchy
+                if (Event.current.shift) // holding (SHIFT)
                 {
-                    foreach (GameObject obj in Selection.gameObjects)
-                    {
-                        if (obj.transform.parent.parent != null) Undo.SetTransformParent(obj.transform, obj.transform.parent.parent, "Unparent Nested");
-                    }
+                    FS_Unparent.toHierarchy();
                 }
-                else // unparent to scene root
+                else
                 {
-                    foreach (GameObject obj in Selection.gameObjects)
-                    {
-                        Undo.SetTransformParent(obj.transform, null, "Unparent To Root");
-                    }
+                    FS_Unparent.toRoot();
                 }
             }
             #endregion
 
-            #region Drop To Ground
-            if (GUILayout.Button(dropToGroundContent, FSUSTStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
+            #region Drop
+            if (GUILayout.Button(dropContent, FSUSTStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
             {
-                foreach (GameObject obj in Selection.gameObjects)
-                {
-                    Undo.RecordObject(obj.transform, "Drop To Ground");
-                    if (obj.GetComponent<Renderer>()) // if obj has mesh, get lowest point and use that to set on ground
-                    {
-                        float obj_minY = obj.GetComponent<Renderer>().bounds.min.y;
-                        obj.transform.position = new Vector3(obj.transform.position.x, 
-                                                                obj.transform.position.y - obj_minY,
-                                                                obj.transform.position.z);
-                    } else // set Y = 0
-                    {
-                        obj.transform.position = new Vector3(obj.transform.position.x, 
-                                                                0,
-                                                                obj.transform.position.z);
-                    }
-                    PrefabUtility.RecordPrefabInstancePropertyModifications(obj.transform);
-                }
+                FS_Drop.toGround();
             }
             #endregion
 
-            #region Solo
+            #region Solo / Unsolo
             if (GUILayout.Button(soloObjectsContent, FSUSTStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
             {
-                var svm = SceneVisibilityManager.instance;
-                foreach (GameObject obj in FindObjectsOfType<GameObject>())
-                {
-                    if (!Selection.Contains (obj)) // only apply to non-selected objects
-                    {
-                        if (!Selection.activeTransform.IsChildOf(obj.transform)) // don't apply to parent of selection else hierarchy will appear empty
-                        {
-                            Undo.RegisterFullObjectHierarchyUndo(obj, "Solo Selection");
-                            obj.hideFlags = HideFlags.HideInHierarchy;
-                            if (obj.GetComponent<Renderer>()) obj.GetComponent<Renderer>().enabled = false;
-
-                            // used to manually refresh Hierarchy Window
-                            EditorApplication.RepaintHierarchyWindow ();
-                            EditorApplication.DirtyHierarchyWindowSorting();
-
-                        }
-                    }
-                }
-
-                svm.Isolate(Selection.gameObjects, true);
+                FS_Solo.selection();
             }
             
             if (GUILayout.Button(unsoloObjectsContent, FSUSTStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
             {
-                var svm = SceneVisibilityManager.instance;
-                foreach (GameObject obj in FindObjectsOfType<GameObject>())
-                {
-                    Undo.RegisterFullObjectHierarchyUndo(obj, "Unsolo All");
-                    obj.hideFlags = HideFlags.None;
-                    if (obj.GetComponent<Renderer>()) obj.GetComponent<Renderer>().enabled = true;
-                }
-                svm.ExitIsolation();
+                FS_Unsolo.all();
             }
             #endregion
 
