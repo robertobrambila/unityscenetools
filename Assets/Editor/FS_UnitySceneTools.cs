@@ -119,9 +119,16 @@ namespace FS.Editor
 
         }
 
-        private void OnGUI() {
-            forceRepaint();
+        public void Update()
+        {   
+            // There doesn't seem like a cleaner/more efficient way of
+            // keeping a responsive UI (mainly for the hover state of buttons).
+            // Considering moving this to the OnInspectorUpdate method,
+            // since that refreshes at 10f/s, though that makes it "feel" slow.
+            Repaint();
+        }
 
+        private void OnGUI() {
             if (verticalLayoutDirection)
             {
                 GUILayout.BeginArea(new Rect(buttonPadding, buttonPadding, buttonHeight + buttonPadding, (buttons * buttonWidth)));
@@ -215,14 +222,6 @@ namespace FS.Editor
                 GUILayout.EndHorizontal();
             }
             GUILayout.EndArea();
-        }
-
-        // force repaint window on mouse move so hover image states work correctly
-        // if we don't call this ongui, the highlight state gets a delay after relaunching unity or exiting Play mode
-        private void forceRepaint()
-        {
-            var window = GetWindow<FS_UnitySceneTools>();
-            if (Event.current.type == EventType.MouseMove) Repaint();
         }
     }
 }
