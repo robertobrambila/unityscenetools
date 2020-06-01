@@ -5,12 +5,14 @@ namespace FS.Editor
 {
     public class FS_NewGameObject
     {
-        // create new gameobject at world zero
-        public static void create()
+        // create & return new gameobject at world zero
+        public static GameObject create()
         {
             GameObject go = new GameObject("GameObject");
             go.transform.position = Vector3.zero;
             Undo.RegisterCreatedObjectUndo(go, "Create New GameObject");
+
+            return go;
         }
 
         // create new gameobject as local child for each object in selection

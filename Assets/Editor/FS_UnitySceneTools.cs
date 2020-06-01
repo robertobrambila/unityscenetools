@@ -8,7 +8,7 @@ namespace FS.Editor
     {
         GUIStyle FSUSTStyle = new GUIStyle();
 
-        static int buttons = 6;
+        static int buttons = 7;
         static float buttonWidth = 40f;
         static float buttonHeight = 40f;
         static float buttonPadding = 4f;
@@ -16,6 +16,7 @@ namespace FS.Editor
         Texture normalTexture, hoverTexture, activeTexture;
         Texture newEmptyGameObjectTexture;
         Texture resetPRSTexture;
+        Texture annotationTexture;
         Texture unparentTexture;
         Texture dropTexture;
         Texture soloObjectsTexture;
@@ -24,6 +25,7 @@ namespace FS.Editor
 
         GUIContent newEmptyGameObjectContent = new GUIContent();
         GUIContent resetPRSContent = new GUIContent();
+        GUIContent annotationContent = new GUIContent();
         GUIContent unparentContent = new GUIContent();
         GUIContent dropContent = new GUIContent();
         GUIContent soloObjectsContent = new GUIContent();
@@ -92,14 +94,18 @@ namespace FS.Editor
             FSUSTStyle.active.background = (Texture2D)activeTexture;
 
 
+            newEmptyGameObjectContent.tooltip = "New Game Object";
             newEmptyGameObjectTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/newgameobject_icon_40x40.png", typeof(Texture));
             newEmptyGameObjectContent.image = newEmptyGameObjectTexture;
-            newEmptyGameObjectContent.tooltip = "New Game Object";
             
 
             resetPRSContent.tooltip = "Reset PRS";
             resetPRSTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/resetPRS_icon_40x40.png", typeof(Texture));
             resetPRSContent.image = resetPRSTexture;
+
+            annotationContent.tooltip = "Annotation";
+            annotationTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/resetPRS_icon_40x40.png", typeof(Texture));
+            annotationContent.image = annotationTexture;
 
             unparentContent.tooltip = "Unparent";
             unparentTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/unparent_icon_40x40.png", typeof(Texture));
@@ -178,6 +184,20 @@ namespace FS.Editor
                 else 
                 {
                     FS_ResetPRS.reset();
+                }
+            }
+            #endregion
+
+            #region Annotation
+            if (GUILayout.Button(annotationContent, FSUSTStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
+            {   
+                if (Event.current.shift) // holding (SHIFT)
+                {
+                    FS_Annotation.newSelection();
+                }
+                else 
+                {
+                    FS_Annotation.newEmpty();
                 }
             }
             #endregion
