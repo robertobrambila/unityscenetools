@@ -104,7 +104,7 @@ namespace FS.Editor
             resetPRSContent.image = resetPRSTexture;
 
             annotationContent.tooltip = "Annotation";
-            annotationTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/resetPRS_icon_40x40.png", typeof(Texture));
+            annotationTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/annotation_icon_40x40.png", typeof(Texture));
             annotationContent.image = annotationTexture;
 
             unparentContent.tooltip = "Unparent";
