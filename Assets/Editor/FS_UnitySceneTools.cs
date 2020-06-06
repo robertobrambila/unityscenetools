@@ -193,11 +193,11 @@ namespace FS.Editor
             {   
                 if (Event.current.shift) // holding (SHIFT)
                 {
-                    FS_Annotation.newSelection();
+                    // FS_Annotation.newSelection();
                 }
                 else 
                 {
-                    FS_Annotation.newEmpty();
+                    // FS_Annotation.newEmpty();
                 }
             }
             #endregion
