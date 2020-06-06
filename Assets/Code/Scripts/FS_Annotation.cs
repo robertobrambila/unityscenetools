@@ -5,5 +5,8 @@ namespace FS.Scripts {
     {
         [TextArea]
         public string Annotation = "";
+
+        [HideInInspector]
+        public string URL ="https://";
     }
 }

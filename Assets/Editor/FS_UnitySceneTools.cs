@@ -103,7 +103,7 @@ namespace FS.Editor
             resetPRSTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/resetPRS_icon_40x40.png", typeof(Texture));
             resetPRSContent.image = resetPRSTexture;
 
-            annotationContent.tooltip = "Annotation";
+            annotationContent.tooltip = "New Annotation";
             annotationTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/annotation_icon_40x40.png", typeof(Texture));
             annotationContent.image = annotationTexture;
 
@@ -193,11 +193,11 @@ namespace FS.Editor
             {   
                 if (Event.current.shift) // holding (SHIFT)
                 {
-                    // FS_Annotation.newSelection();
+                    FS_NewAnnotation.add();
                 }
                 else 
                 {
-                    // FS_Annotation.newEmpty();
+                    FS_NewAnnotation.create();
                 }
             }
             #endregion

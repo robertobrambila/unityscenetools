@@ -15,6 +15,16 @@ namespace FS.Editor
             return go;
         }
 
+        // create & return new gameobject at world zero with a custom name
+        public static GameObject create(string _name)
+        {
+            GameObject go = new GameObject(_name);
+            go.transform.position = Vector3.zero;
+            Undo.RegisterCreatedObjectUndo(go, "Create New " + _name);
+
+            return go;
+        }
+
         // create new gameobject as local child for each object in selection
         public static void createAsChild()
         {
