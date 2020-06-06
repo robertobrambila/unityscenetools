@@ -85,9 +85,9 @@ namespace FS.Editor
         void Awake()
         {
             
-            normalTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/normal_40x40.png", typeof(Texture));
-            activeTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/active_40x40.png", typeof(Texture));
-            hoverTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/hover_40x40.png", typeof(Texture));
+            normalTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/FutureSupervillain/Scene Tools/normal_40x40.png", typeof(Texture));
+            activeTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/FutureSupervillain/Scene Tools/active_40x40.png", typeof(Texture));
+            hoverTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/FutureSupervillain/Scene Tools/hover_40x40.png", typeof(Texture));
 
             FSUSTStyle.normal.background = (Texture2D)normalTexture;
             FSUSTStyle.hover.background = (Texture2D)hoverTexture;
@@ -95,32 +95,32 @@ namespace FS.Editor
 
 
             newEmptyGameObjectContent.tooltip = "New Game Object";
-            newEmptyGameObjectTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/newgameobject_icon_40x40.png", typeof(Texture));
+            newEmptyGameObjectTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/FutureSupervillain/Scene Tools/newgameobject_icon_40x40.png", typeof(Texture));
             newEmptyGameObjectContent.image = newEmptyGameObjectTexture;
             
 
             resetPRSContent.tooltip = "Reset PRS";
-            resetPRSTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/resetPRS_icon_40x40.png", typeof(Texture));
+            resetPRSTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/FutureSupervillain/Scene Tools/resetPRS_icon_40x40.png", typeof(Texture));
             resetPRSContent.image = resetPRSTexture;
 
             annotationContent.tooltip = "New Annotation";
-            annotationTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/annotation_icon_40x40.png", typeof(Texture));
+            annotationTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/FutureSupervillain/Scene Tools/annotation_icon_40x40.png", typeof(Texture));
             annotationContent.image = annotationTexture;
 
             unparentContent.tooltip = "Unparent";
-            unparentTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/unparent_icon_40x40.png", typeof(Texture));
+            unparentTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/FutureSupervillain/Scene Tools/unparent_icon_40x40.png", typeof(Texture));
             unparentContent.image = unparentTexture;
 
             dropContent.tooltip = "Drop";
-            dropTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/drop_icon_40x40.png", typeof(Texture));
+            dropTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/FutureSupervillain/Scene Tools/drop_icon_40x40.png", typeof(Texture));
             dropContent.image = dropTexture;
 
             soloObjectsContent.tooltip = "Solo Objects";
-            soloObjectsTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/solo_icon_40x40.png", typeof(Texture));
+            soloObjectsTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/FutureSupervillain/Scene Tools/solo_icon_40x40.png", typeof(Texture));
             soloObjectsContent.image = soloObjectsTexture;
 
             unsoloObjectsContent.tooltip = "Unsolo All";
-            unsoloObjectsTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/fs_unityscenetools/unsolo_icon_40x40.png", typeof(Texture));
+            unsoloObjectsTexture = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Editor Default Resources/FutureSupervillain/Scene Tools/unsolo_icon_40x40.png", typeof(Texture));
             unsoloObjectsContent.image = unsoloObjectsTexture;
 
         }
