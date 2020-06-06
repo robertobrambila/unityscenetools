@@ -35,8 +35,8 @@ namespace FS.Editor
         bool verticalLayoutDirection = false;
 
         #region about context menu
-        string prodName = "F$ Scene Tools";
-        string verNumber = "v0.1.0";
+        string prodName = "Scene Tools";
+        string verNumber = "v0.2.0";
         string url = "https://www.futuresupervillain.com";
 
         void IHasCustomMenu.AddItemsToMenu(GenericMenu menu)
