@@ -22,7 +22,7 @@ Adds a new empty GameObject into the scene at world space zero.
   
 ### :sparkles: Reset PRS
 ![New GameObject Icon](https://imgur.com/yMHrLR8.png) 
-Resets the Transform component (local PSR) of the selected GameObject(s) to 0.
+Resets the Transform component (local PRS) of the selected GameObject(s) to 0.
 * **(SHIFT)**  Resets the local (p)osition of the selected GameObject(s) to 0.
 * **(ALT)**  Resets the local (r)otation of the selected GameObject(s) to 0.
 * **(CTRL)**  Resets the local (s)cale of the selected GameObject(s) to 0.  
