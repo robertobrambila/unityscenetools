@@ -41,24 +41,33 @@ namespace FS.Editor
         {
             GameObject go = new GameObject("GameObject");
             Undo.RegisterCreatedObjectUndo(go, "Create New Parent GameObject");
-            foreach (GameObject obj in Selection.gameObjects)
+
+            Object[] objs = Selection.GetFiltered(typeof(GameObject), SelectionMode.TopLevel); // exclude children
+
+            // reverse for loop to keep selection index order
+            for (int i = objs.Length; i > 0; i--)
             {
-                go.transform.SetParent(obj.transform.parent); // preserves any nested hierarchy
-                Undo.SetTransformParent(obj.transform,go.transform, "Set New Parent");
+                GameObject obj = (GameObject) objs[i - 1]; // cast from Object to GameObject
+                go.transform.SetParent( obj.transform.parent); // preserves any pre-nested hierarchy
+                Undo.SetTransformParent( obj.transform, go.transform, "Set New Parent");
             }
         }
 
         // create new gameobject as local parent for each object in selection
         public static void createAsParents()
         {
-            foreach (GameObject obj in Selection.gameObjects)
+            GameObject[] objs = Selection.gameObjects;
+            
+            // reverse for loop to keep selection index order
+            for (int i = objs.Length; i > 0; i--)
             {
                 GameObject go = new GameObject("GameObject");
                 Undo.RegisterCreatedObjectUndo(go, "Create New Parent GameObjects");
-
-                go.transform.SetParent(obj.transform.parent); // preserves any nested hierarchy
-                Undo.SetTransformParent(obj.transform,go.transform, "Set New Parent");
+            
+                go.transform.SetParent(objs[i -1].transform.parent); // preserves any nested hierarchy
+                Undo.SetTransformParent(objs[i - 1].transform,go.transform, "Set New Parent");
             }
+
         }
 
     }
