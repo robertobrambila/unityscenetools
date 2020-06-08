@@ -1,5 +1,5 @@
 <div align="center">
-  <img alt="Unity Scene Tools v0.1.0" src="https://imgur.com/HlvLkXm.png">
+  <img alt="Unity Scene Tools v0.1.0" src="https://i.imgur.com/ckjW9HA.jpg">
 </div>
 
 ---
