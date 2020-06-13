@@ -8,7 +8,7 @@
 A collection of useful Unity scene tools to enhance productivity, packaged as a custom Editor window. Tested on Unity 2019.3.5f1.
 
 ## Features
-[**v0.2.0**] As of the latest release, the following features are included. Note that some buttons accept modifier keys (hold the modifier key and press the button) for alternate actions. The layout can be oriented horizontally or vertically for your preferred docking style.
+[**v0.2.1**] As of the latest release, the following features are included. Note that some buttons accept modifier keys (hold the modifier key and press the button) for alternate actions. The layout can be oriented horizontally or vertically for your preferred docking style.
 
 :sparkles: denotes a new update to this feature.  
 :new: denotes a new feature.  
@@ -31,7 +31,7 @@ Resets the Transform component (local PRS) of the selected GameObject(s) to 0.
 ![New Annotation Icon](https://imgur.com/8JkY3HZ.png) 
 Creates a new gameobject with a text area field and custom URL link launcher for jotting down notes.
 * **(SHIFT)**  Inserts a new annotation script component to the selected GameObject(s) instead of a creating a new one.
-![New Annotation](https://i.imgur.com/kK9VloH.png)  
+![New Annotation](https://i.imgur.com/SfH63e7.jpg)  
   
 ### :sparkles: Unparent
 ![New GameObject Icon](https://imgur.com/mDGIi5U.png) 
