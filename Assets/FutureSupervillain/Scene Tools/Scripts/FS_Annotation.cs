@@ -3,8 +3,11 @@
 namespace FS.Scripts {
     public class FS_Annotation : MonoBehaviour
     {
-        [TextArea]
-        public string Annotation = "";
+        [HideInInspector]
+        public string annotationTextArea = "";
+
+        [HideInInspector]
+        public Vector2 scrollPos;
 
         [HideInInspector]
         public string URL ="https://";

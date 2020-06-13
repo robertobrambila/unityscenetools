@@ -36,7 +36,7 @@ namespace FS.Editor
 
         #region about context menu
         string prodName = "Scene Tools";
-        string verNumber = "v0.2.0";
+        string verNumber = "v0.2.1";
         string url = "https://www.futuresupervillain.com";
 
         void IHasCustomMenu.AddItemsToMenu(GenericMenu menu)
